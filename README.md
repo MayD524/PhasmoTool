@@ -1,2 +1,2 @@
 # PhasmoTool
-A tool kit for making life in phasmophobia a little bit easier.
+A tool kit for making life in phasmophobia a little bit easier. The digital phasmo notebook :)
