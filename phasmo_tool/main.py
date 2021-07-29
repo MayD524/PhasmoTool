@@ -2,13 +2,16 @@ from pprint import pprint
 import UPL
 import sys
 
-from UPL.Core import currentDir
-
-def diff(list1:list, list2:list) -> list:
-    return list(set(list1) - set(list2)) + list(set(list2) - set(list1))
-
 class phasmoTool:
     def __init__(self, ghosts:dict) -> UPL.null:
+        """
+            @params:
+                ghosts (dict) : every ghost in phasmo
+                
+            @returns:
+                None
+            the init method
+        """
         self.ghosts = ghosts
         self.possible = []
         self.ghosts_sep = {
@@ -23,11 +26,30 @@ class phasmoTool:
         self.groupGhosts()
         
     def groupGhosts(self) -> UPL.null:
+        """
+            @params:
+                None
+                
+            @returns:
+                None
+        
+            groups the ghosts into different catagories based off of what evidence
+            each ghost has
+        """
         for ghost in self.ghosts.keys():
             for evidence in self.ghosts[ghost]["Evidence"]:
                 self.ghosts_sep[evidence.lower()].append(ghost)
     
     def display_possible(self) -> UPL.null:
+        """
+            @params:
+                None
+                
+            @returns:
+                None
+            
+            displays all the possible ghosts
+        """
         print("All possible ghosts:")
         if len(self.possible) == 1:
             print(f"The ghost is a {self.possible[0]}")
@@ -42,6 +64,15 @@ class phasmoTool:
             print(f"\t{ghost} : {tmp}")
             
     def current_guess(self) -> UPL.null:
+        """
+            @params:
+                None
+                
+            @returns:
+                None
+            
+            Attempts to figure out what the ghost may be
+        """
         possible = []
         for evidence in self.ghosts_sep.keys():
             if evidence in self.current_round:
@@ -55,8 +86,19 @@ class phasmoTool:
         print("[add] Add Evidence\n[rem] Remove Evidence\n[look] Ghost Lookup\n[ghosts] Display all possible ghosts\n[evi] Display all current evidences\n[clear] Clears the screen\n[help] Display help\n[exit] Exits")
         
     def main(self) -> UPL.null:
+        """
+            @params:
+                None
+                
+            @returns:
+                None
+                
+            Runs all the time and gets user input
+        """
         self.displayHelp()
         while True:
+            
+            ## get user input
             user_inp = UPL.Core.ainput("> ", str, 3).lower()
             
             if user_inp == "exit":
@@ -150,7 +192,8 @@ class phasmoTool:
                 ## wild card
                 case _:
                     pass
-        
+
+## !! START !! ##
 if __name__ == "__main__":
     ghost_data = UPL.Core.file_manager.getData_json("ghosts.json")
     tool = phasmoTool(ghost_data)
