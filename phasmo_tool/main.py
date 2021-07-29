@@ -142,7 +142,7 @@ class phasmoTool:
                         print(f'{data}:\n\tDescription: {self.ghosts[data]["Description"]}\n\tStrength: {self.ghosts[data]["Strength"]}\n\tWeakness: {self.ghosts[data]["Weakness"]}\nEvidence:\n\t{self.ghosts[data]["Evidence"][0]}\n\t{self.ghosts[data]["Evidence"][1]}\n\t{self.ghosts[data]["Evidence"][2]}')
                     
                     else:
-                        print("What the fuck kinda ghost is that...")
+                        print("What the kinda ghost is that...")
                 
                 case "help":
                     self.displayHelp()
