@@ -45,6 +45,7 @@ class phasmoTool:
                 self.ghosts_sep[evidence.lower()].append(ghost)
     
     def get_evidenceType(self, evidence:str) -> str:
+        evidence = evidence.lower()
         if "finger" in evidence or "print" in evidence or "hand" in evidence:
             return "fingerprints"
         
