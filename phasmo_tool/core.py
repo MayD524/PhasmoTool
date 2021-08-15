@@ -77,7 +77,7 @@ class phasmoTool:
             UPL.gui.popup(title="Unknown ghost type", msg=f"The ghost {ghost} is not known")  
     
     def add_evidence(self) -> UPL.null:
-        evidence = UPL.gui.prompt("Add Evidence", "What evidence have you collected hunter?")   
+        evidence = UPL.gui.confirm("Select Evidence", "What evidence have you collected hunter?", ["fingerprints", "ghost orb", "spirit box", "freezing temperatures", "emf level 5", "ghost writing"])
         evidence = self.get_evidenceType(evidence)
         
         if evidence == False:
@@ -90,7 +90,7 @@ class phasmoTool:
         self.current_guess()
     
     def rem_evidence(self) -> UPL.null:
-        evidence = UPL.gui.prompt("Remove Evidence", "What evidence do you want to remove?")
+        evidence = UPL.gui.confirm("Select Evidence", "What evidence have you collected hunter?", ["fingerprints", "ghost orb", "spirit box", "freezing temperatures", "emf level 5", "ghost writing"])
         evidence = self.get_evidenceType(evidence)
         
         if evidence == False:
