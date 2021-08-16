@@ -1,0 +1,25 @@
+{
+    "in_game_ghosts" : [
+        "Banshee",
+        "Demon",
+        "Hantu",
+        "Jinn",
+        "Mare",
+        "Oni",
+        "Phantom",
+        "Poltergeist",
+        "Revenant",
+        "Shade",
+        "Spirit",
+        "Wraith",
+        "Yokai",
+        "Yurei"
+    ],
+    "in_game_items" : [
+
+    ],
+    "in_game_maps" : [
+
+    ]
+
+}

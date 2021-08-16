@@ -4,7 +4,6 @@
 """
 import UPL
 import sys
-
 class phasmoTool:
     def __init__(self, ghosts:dict) -> UPL.null:
         """
@@ -26,6 +25,8 @@ class phasmoTool:
             "freezing temperatures" : []
         }
         self.current_round = []
+        self.default = ["fingerprints", "ghost orb", "spirit box", "freezing temperatures", "emf level 5", "ghost writing"]
+        self.possible_evidence = self.default
         self.clicks = 0
         self.groupGhosts()
         
@@ -77,7 +78,7 @@ class phasmoTool:
             UPL.gui.popup(title="Unknown ghost type", msg=f"The ghost {ghost} is not known")  
     
     def add_evidence(self) -> UPL.null:
-        evidence = UPL.gui.confirm("Select Evidence", "What evidence have you collected hunter?", ["fingerprints", "ghost orb", "spirit box", "freezing temperatures", "emf level 5", "ghost writing"])
+        evidence = UPL.gui.confirm("Select Evidence", "What evidence have you collected hunter?", self.possible_evidence)
         evidence = self.get_evidenceType(evidence)
         
         if evidence == False:
@@ -86,11 +87,26 @@ class phasmoTool:
         
         if evidence not in self.current_round:
             self.current_round.append(evidence)
-        
-        self.current_guess()
+            self.current_guess()
+            tmp = []
+
+            for ghost in self.possible:
+                evi = self.ghosts[ghost]['Evidence']
+                for i in evi:
+                    if i.lower() == evidence:
+                        continue
+                    elif i.lower() in self.current_round:
+                        continue
+                    
+                    elif i not in tmp:
+                        tmp.append(i)
+         
+            self.possible_evidence = tmp
+
+                
     
     def rem_evidence(self) -> UPL.null:
-        evidence = UPL.gui.confirm("Select Evidence", "What evidence have you collected hunter?", ["fingerprints", "ghost orb", "spirit box", "freezing temperatures", "emf level 5", "ghost writing"])
+        evidence = UPL.gui.confirm("Select Evidence", "What evidence have you collected hunter?", self.current_round)
         evidence = self.get_evidenceType(evidence)
         
         if evidence == False:
