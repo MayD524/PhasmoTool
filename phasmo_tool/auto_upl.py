@@ -24,12 +24,18 @@ if __name__ == "__main__":
         print("Installing UPL")
         filename = download(UPL_Link)
         print("UPL installed\nCreating UPL Directory")
-        if not os.path.exists(f'{sys.path[6]}/UPL'):
-            os.mkdir(f'{sys.path[6]}/UPL')
+        pySitepath = ''
+        for path in sys.path:
+            if path.endswith("\\lib\\site-packages"):
+                pySitepath = path
+                
+        if not os.path.exists(f'{pySitepath}/UPL'):
+            os.mkdir(f'{pySitepath}/UPL')
         else:
             print("UPL Directory exists")
+            
         print("Extracting UPL")
-        shutil.unpack_archive(filename, f'{sys.path[6]}/UPL')
+        shutil.unpack_archive(filename, f'{pySitepath}/UPL')
         print("Cleaning up")
         os.remove("UPL.zip")
         
