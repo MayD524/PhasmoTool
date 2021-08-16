@@ -10,13 +10,10 @@ A tool kit for making life in phasmophobia a little bit easier. The digital phas
 
 ### Requirements:
     Requires python 3.8 or greater -> https://www.python.org/downloads/
-    Requires UPL -> https://github.com/RyanD524/UPL
-    Requires psutil -> ```pip install psutil```
 
 ### How To use:
     This works on all systems! *like it matters*
-    But you just run ```python Gui.py``` for the gui
-    version and ```python core.py``` for command line!
+    Run the run.bat file for the gui or run python core.py for commandline
 
 ### Notes:
     There is an easter egg and welllll have fun :>
