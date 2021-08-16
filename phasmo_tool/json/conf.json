@@ -40,15 +40,14 @@
         "Tripod"
     ],
     "in_game_maps" : [
-        "Willow Street House",
-        "Tanglewood Street House",
-        "Edgefield Street House",
-        "Ridgeview Road House",
-        "Grafton Farmhouse",
+        "Asylum",
         "Bleasdale Farmhouse",
         "Brownston High School",
+        "Edgefield Street House",
+        "Grafton Farmhouse",
         "Prison",
-        "Asylum"
+        "Ridgeview Road House",
+        "Tanglewood Street House",
+        "Willow Street House"
     ]
-
 }

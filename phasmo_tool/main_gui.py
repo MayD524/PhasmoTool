@@ -1,5 +1,6 @@
 from core import phasmoTool
 from tkinter import ttk
+import map_display
 import tkinter 
 import psutil
 import UPL
@@ -7,9 +8,10 @@ import UPL
 
 class phasmoToolGui:
     def __init__(self):
-        self.ghosts = UPL.Core.file_manager.getData_json("./json/ghosts.json")
-        self.config = UPL.Core.file_manager.getData_json("./json/conf.json")
-        self.phasTool = phasmoTool(self.ghosts)
+        self.ghosts    = UPL.Core.file_manager.getData_json("./json/ghosts.json")
+        self.config    = UPL.Core.file_manager.getData_json("./json/conf.json")
+        self.game_maps = UPL.Core.file_manager.getData_json("./json/maps.json")
+        self.phasTool  = phasmoTool(self.ghosts)
         self.layout()
         self.root.mainloop()
 
@@ -18,7 +20,10 @@ class phasmoToolGui:
         self.root = tkinter.Tk()
         self.tabCtrl = ttk.Notebook(self.root)
         self.noteFrame = tkinter.Frame(self.root) 
-
+        ##Menubar 
+        self.menuBar = tkinter.Menu(self.root,tearoff=0)
+        self.settingsBar = tkinter.Menu(self.menuBar,tearoff=0)
+        self.settingsBar.add_command(label="Change background color",command=self.test)
         ## Notes page
         self.textBox = tkinter.Text(self.noteFrame)
         self.textBox.grid(row=0,column=0,sticky="NSEW")
@@ -93,6 +98,7 @@ class phasmoToolGui:
         self.root.title("C69 PhasmoTool")
         self.photo = tkinter.PhotoImage(file="./images/icons/icon.png")
         self.root.iconphoto(False, self.photo)
+        self.root.config(menu=self.menuBar)
     
     
     def saveBtnFunc(self) -> None:
@@ -150,8 +156,8 @@ class phasmoToolGui:
             pass
         
         elif mode == "Maps":
-            pass
-        
+            map_name = UPL.gui.confirm("Hunters Index", "What map would you like to look up?", self.config["in_game_maps"])
+            map_display.displayMap(map_name=map_name, map_images=self.game_maps)
     def eviBtnFunc(self) -> None:
         if self.phasTool.current_round != []:
             msg = "\n\t".join(self.phasTool.current_round)
