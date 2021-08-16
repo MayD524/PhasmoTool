@@ -16,10 +16,39 @@
         "Yurei"
     ],
     "in_game_items" : [
-
+        "Spirit Box",
+        "Ghost Writing Book",
+        "Photo Camera",
+        "EMF Reader",
+        "Video Camera",
+        "UV FlashLight",
+        "Flashlight",
+        "Candle",
+        "Crucifix",
+        "Glow Stick",
+        "Head Mounted Camera",
+        "Infrared Light Sensor",
+        "Lighter",
+        "Motion Sensor",
+        "Parabolic Microphone",
+        "Salt Shaker",
+        "Sanity Pills",
+        "Smudge Sticks",
+        "Sound Sensor",
+        "Strong Flashlight",
+        "Thermometer",
+        "Tripod"
     ],
     "in_game_maps" : [
-
+        "Willow Street House",
+        "Tanglewood Street House",
+        "Edgefield Street House",
+        "Ridgeview Road House",
+        "Grafton Farmhouse",
+        "Bleasdale Farmhouse",
+        "Brownston High School",
+        "Prison",
+        "Asylum"
     ]
 
 }

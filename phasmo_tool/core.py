@@ -2,8 +2,16 @@
     Authors: Cross/Ryan & Sweden/Jerk
     Date: 8/15/2021
 """
-import UPL
+try:
+    import UPL
+
+except ImportError:
+    import sys, os
+    os.system(f"{sys.executable} ./auto_upl.py")
+    os.system(f"{sys.executable} -m pip install psutil")
+    import UPL
 import sys
+
 class phasmoTool:
     def __init__(self, ghosts:dict) -> UPL.null:
         """
@@ -115,16 +123,28 @@ class phasmoTool:
         
         if evidence in self.current_round:
             self.current_round.remove(evidence)
+            self.current_guess()
+            tmp = []
+            for ghost in self.possible:
+                evi = self.ghosts[ghost]['Evidence']
+                for i in evi:
+                    if i.lower() in self.current_round:
+                        continue
+                    
+                    elif i.lower() not in tmp:
+                        tmp.append(i)
+                        
+            self.possible_evidence = tmp
             
         self.current_guess()
             
     
     ## possible ghosts
-    def display_possibleGUI(self) -> UPL.null:
+    def display_possibleGUI(self) -> list:
         return self.possible
     
     ## all evidence
-    def display_eviGUI(self) -> UPL.null:
+    def display_eviGUI(self) -> list:
         return self.current_round
     
     def display_possible(self) -> UPL.null:
