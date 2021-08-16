@@ -1,7 +1,15 @@
-from sys import version
 from main_gui import phasmoToolGui
 from tkinter import *
 import C69_updater
+
+try:
+    import UPL
+
+except ImportError:
+    import sys, os
+    os.system(f"{sys.executable} ./auto_upl.py")
+    os.system(f"{sys.executable} -m pip install psutil")
+    import UPL
 
 ## update this per version (used in updater)
 __version__ = '0.2.3'
@@ -21,10 +29,10 @@ def boot_window():
     
 if __name__ == "__main__":
     need_update = C69_updater.check_update("phasmo_tool", __version__)
-    print(need_update)
     
     if need_update[0]:
-        C69_updater.update_program("phasmo_tool")
+        if UPL.gui.confirm("C69 Phasmo Tool", f"Do you want to update to version {need_update[1]['version']}", ["Yes", "No"]) == "Yes":
+            C69_updater.update_program("phasmo_tool")
     
     boot_window()
     phasmoToolGui()

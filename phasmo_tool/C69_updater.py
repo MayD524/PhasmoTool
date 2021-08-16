@@ -26,10 +26,5 @@ def check_update(project_name:str, version:str) -> tuple:
 def update_program(project_name:str) -> None:
     filename = download(f"https://c69projectrepo.crossroadsactua.repl.co/{project_name}.zip")
     
-    if not os.path.exists(f"./{project_name}"):
-        os.mkdir(f"./{project_name}")
-    
-    shutil.unpack_archive(filename, f"./{project_name}")
+    shutil.unpack_archive(filename, f"./")
     os.remove(filename)
-        
-    shutil.unpack_archive()
