@@ -8,7 +8,7 @@ def boot_window():
     win.resizable(False, False)
     canvas = Canvas(win, width=300, height=300)
     canvas.pack()
-    img = PhotoImage(file="icon.png")
+    img = PhotoImage(file="./images/icons/icon.png")
     canvas.create_image(150, 150, image=img)
     
     win.after(5000, lambda:win.destroy())

@@ -7,8 +7,8 @@ import UPL
 
 class phasmoToolGui:
     def __init__(self):
-        self.ghosts = UPL.Core.file_manager.getData_json("ghosts.json")
-        self.config = UPL.Core.file_manager.getData_json("conf.json")
+        self.ghosts = UPL.Core.file_manager.getData_json("./json/ghosts.json")
+        self.config = UPL.Core.file_manager.getData_json("./json/conf.json")
         self.phasTool = phasmoTool(self.ghosts)
         self.layout()
         self.root.mainloop()
@@ -91,7 +91,7 @@ class phasmoToolGui:
         self.root.resizable(False, False)
         self.root.geometry("256x260")
         self.root.title("C69 PhasmoTool")
-        self.photo = tkinter.PhotoImage(file="icon.png")
+        self.photo = tkinter.PhotoImage(file="./images/icons/icon.png")
         self.root.iconphoto(False, self.photo)
     
     
@@ -100,7 +100,7 @@ class phasmoToolGui:
             UPL.gui.popup("There are more ghosts for you to check for, or You havent inputed all the evidence", "Little issue")
 
         else:
-            game_stats = UPL.Core.file_manager.getData_json("game_stats.json")
+            game_stats = UPL.Core.file_manager.getData_json("./json/game_stats.json")
             currentMap = UPL.gui.confirm("Map", "What map are you playing on?", self.config["in_game_maps"])
             gameID = UPL.Core.generate_code(10)
             
@@ -126,7 +126,7 @@ class phasmoToolGui:
                 "notes" : notes
             }
             
-            UPL.Core.file_manager.write_json("game_stats.json", game_stats, 2)
+            UPL.Core.file_manager.write_json("./json/game_stats.json", game_stats, 2)
 
     def addBtnFunc(self) -> None:
         self.phasTool.add_evidence()
