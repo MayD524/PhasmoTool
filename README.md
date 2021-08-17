@@ -16,7 +16,7 @@ A tool kit for making life in phasmophobia a little bit easier. The digital phas
     Run the run.bat file for the gui or run python core.py for commandline
 
 ### Notes:
-    There is an easter egg and welllll have fun :>
+    Maps found at https://steamcommunity.com/sharedfiles/filedetails/?id=2251267947
 
 
 ### Contact:

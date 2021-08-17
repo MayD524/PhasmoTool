@@ -1,4 +1,11 @@
-import requests
+try:
+    import requests
+except Exception:
+    import os
+    import sys
+    os.system(f"{sys.executable} -m pip install requests")
+    import requests
+    
 import shutil
 import json
 import os

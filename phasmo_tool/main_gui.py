@@ -1,10 +1,12 @@
 from core import phasmoTool
 from tkinter import ttk
 import map_display
-import tkinter 
+import tkinter
 import psutil
 import UPL
 
+## import last due to UPL 
+#from networking.client.network_client import C69_phasmoTool_networking
 
 class phasmoToolGui:
     def __init__(self):
@@ -12,44 +14,79 @@ class phasmoToolGui:
         self.config    = UPL.Core.file_manager.getData_json("./json/conf.json")
         self.game_maps = UPL.Core.file_manager.getData_json("./json/maps.json")
         self.phasTool  = phasmoTool(self.ghosts)
+        
+        if self.config["allow_networking"] == True:
+            self.client = C69_phasmoTool_networking(
+                self.config["networking_display_name"],
+                self.phasTool,
+                self,
+                self.config["networking_host_ip"],
+                self.config["networking_host_port"]
+            )
+        
         self.layout()
+     
         self.root.mainloop()
 
     
     def layout(self):
         self.root = tkinter.Tk()
+        
         self.tabCtrl = ttk.Notebook(self.root)
-        self.noteFrame = tkinter.Frame(self.root) 
         ##Menubar 
         self.menuBar = tkinter.Menu(self.root,tearoff=0)
         self.settingsBar = tkinter.Menu(self.menuBar,tearoff=0)
         self.settingsBar.add_command(label="Change background color",command=self.test)
+        
         ## Notes page
+        self.noteFrame = tkinter.Frame(self.root) 
         self.textBox = tkinter.Text(self.noteFrame)
         self.textBox.grid(row=0,column=0,sticky="NSEW")
-
+        
+        self.noteScroolBar = tkinter.Scrollbar(self.textBox)
+        self.noteScroolBar.place(relheight=1, relx=1)
+        
+        ## Objectives
+        self.objectivesFrame = tkinter.Frame(self.root)
+        self.addObjBtn = tkinter.Button(self.objectivesFrame, text="Add objective", command = self.addObjFunc) 
+        self.addObjBtn.grid(row=0,column=0,sticky="NSEW")
+        self.remObjBtn = tkinter.Button(self.objectivesFrame, text="Remove objective", command = self.remObjFunc) 
+        self.remObjBtn.grid(row=0,column=1,sticky="NSEW")
+        
+        ##Chat frame
+        self.chatFrame = tkinter.Frame(self.root)
+        self.chatBox = tkinter.Text(self.chatFrame,width=25,height=25)
+        self.chatBox.grid(row=0,column=0,sticky="NSEW")
+        self.sendField = tkinter.Entry(self.chatFrame)
+        self.sendField.grid(row=1,column=0,sticky="NSEW")
+        self.sendBtn = tkinter.Button(self.chatFrame,text="Send message",command = self.test)
+        self.sendBtn.grid(row=1,column=1,sticky="NSEW")
+        
+        self.chatScrollBar = tkinter.Scrollbar(self.chatBox)
+        self.chatScrollBar.place(relheight=1, relx=0.974)
+        
         ## About frame 
         self.aboutFrame = tkinter.Frame(self.root) 
-        self.teamStrVar = tkinter.StringVar() 
-        self.peopleStrVar = tkinter.StringVar() 
-        self.teamlbl = tkinter.Label(self.aboutFrame,textvariable=self.teamStrVar)
-        self.teamStrVar.set("C69 Team:")
+
+        
+        self.teamlbl = tkinter.Label(self.aboutFrame,text="C69 Team:")
         self.teamlbl.grid(row=1,column=0,sticky="NSEW") 
-        self.peoplelbl = tkinter.Label(self.aboutFrame,textvariable=self.peopleStrVar)
-        self.peopleStrVar.set("People:")
+        
+        self.peoplelbl = tkinter.Label(self.aboutFrame,text="People:")
         self.peoplelbl.grid(row=1,column=1,sticky="NSEW") 
-        self.team_list = tkinter.Listbox(self.aboutFrame)
+        
+        self.team_list = tkinter.Listbox(self.aboutFrame,width=40,height=15)
         self.team_list.grid(row=2,column=0,sticky="NSEW") 
         self.team_list.insert(0,"Devs")
         self.team_list.insert(1,"Artists")
         self.team_list.insert(2,"About")
         self.team_list.bind('<<ListboxSelect>>',self.teamSelect)
-        self.people_list = tkinter.Listbox(self.aboutFrame)
+        self.people_list = tkinter.Listbox(self.aboutFrame,width=40,height=25)
         self.people_list.grid(row=2,column=1,sticky="NSEW") 
 
         ##Tips frame
         self.tipsFrame = tkinter.Frame(self.root)    
-        self.tips_list = tkinter.Listbox(self.tipsFrame)
+        self.tips_list = tkinter.Listbox(self.tipsFrame,width=100,height=80)
         self.tips_list.insert(0,"Show us")
         self.tips_list.insert(1,"Spirit")
         self.tips_list.insert(2,"")
@@ -64,42 +101,81 @@ class phasmoToolGui:
         ## evidence frame
         self.eviFrame = tkinter.Frame(self.root)
         self.eviFrame.grid(row=0,column=0,sticky="NSEW")
-        self.addBtn = tkinter.Button(self.eviFrame, text="Add Evidence", command = self.addBtnFunc) 
+        
+        self.addBtn = tkinter.Button(self.eviFrame, text="Add Evidence",width=45, height=5,command = self.addBtnFunc) 
         self.addBtn.grid(row=0,column=0,sticky="NSEW")
-        self.remBtn = tkinter.Button(self.eviFrame, text="Remove Evidence", command = self.remBtnFunc) 
+        
+        self.remBtn = tkinter.Button(self.eviFrame, text="Remove Evidence",width=25, height=5, command = self.remBtnFunc) 
         self.remBtn.grid(row=0,column=1,sticky="NSEW")
-        self.lookBtn = tkinter.Button(self.eviFrame, text="Lookup", command = self.lookBtnFunc) 
+        
+        self.lookBtn = tkinter.Button(self.eviFrame, text="Lookup",width=10, height=5, command = self.lookBtnFunc) 
         self.lookBtn.grid(row=1,column=0,sticky="NSEW")
-        self.clrBtn = tkinter.Button(self.eviFrame, text="Clear", command = self.clearBtnFunc) 
+        
+        self.clrBtn = tkinter.Button(self.eviFrame, text="Clear",width=10, height=2, command = self.clearBtnFunc) 
         self.clrBtn.grid(row=1,column=1,sticky="NSEW") 
-        self.eviBtn = tkinter.Button(self.eviFrame, text="Evidence", command = self.eviBtnFunc) 
+        
+        self.eviBtn = tkinter.Button(self.eviFrame, text="Evidence",width=10, height=2, command = self.eviBtnFunc) 
         self.eviBtn.grid(row=2,column=0,sticky="NSEW")
-        self.dontBtn = tkinter.Button(self.eviFrame, text="Save stats", command = self.saveBtnFunc) 
+        
+        self.dontBtn = tkinter.Button(self.eviFrame, text="Save stats",width=10, height=2, command = self.saveBtnFunc) 
         self.dontBtn.grid(row=2,column=1,sticky="NSEW")
+        
         self.ghost_list = tkinter.Listbox(self.eviFrame)
         self.ghost_list.grid(row=3,column=0,sticky="NSEW") 
+        
         self.evidence_list = tkinter.Listbox(self.eviFrame)
         self.evidence_list.grid(row=3,column=1,sticky="NSEW") 
+        
         self.ghost_list.bind('<<ListboxSelect>>',self.CurSelet)
         self.eviFrame.pack()
         
         ## other stuff
-        self.tabCtrl.add(self.eviFrame,text='Evidence') 
+        self.tabCtrl.add(self.eviFrame,text='Evidence')
+        #self.eviFrame.columnconfigure( (0,1) weight=1)
+        #self.eviFrame.rowconfigure((0,1) weight=1)
+         
+        #self.tabCtrl. 
         self.tabCtrl.add(self.noteFrame,text='Notes')
-        
-        #tabCtrl.add(statsFrame,text='Stats')
+        self.tabCtrl.add(self.objectivesFrame,text='Objectives')
+        self.tabCtrl.add(self.chatFrame,text='Chat')
         self.tabCtrl.add(self.tipsFrame,text='Tips')
         self.tabCtrl.add(self.aboutFrame,text='About')
         self.tabCtrl.pack(expand=1,fill="both")
+        #tabCtrl.add(statsFrame,text='Stats')
 
         ## window stuff
         self.root.resizable(False, False)
-        self.root.geometry("256x260")
+        self.root.geometry("500x500")
         self.root.title("C69 PhasmoTool")
         self.photo = tkinter.PhotoImage(file="./images/icons/icon.png")
         self.root.iconphoto(False, self.photo)
         self.root.config(menu=self.menuBar)
     
+    def addObjFunc(self) -> None:
+        self.names = []
+        for i in range(3):
+            self.names.append(UPL.gui.confirm("Add objective","Objective name" ,self.config['in_game_objectives']))
+        
+        self.obj1 = tkinter.Checkbutton(self.objectivesFrame,text="Bone")   
+        self.obj1.grid(row=2,column=0,sticky="NSEW")
+        
+        self.obj2 = tkinter.Checkbutton(self.objectivesFrame,text=self.names[0])
+        self.obj2.grid(row=2,column=1,sticky="NSEW")
+        
+        self.obj3 = tkinter.Checkbutton(self.objectivesFrame,text=self.names[1])
+        self.obj3.grid(row=3,column=0,sticky="NSEW")
+        
+        self.obj4 = tkinter.Checkbutton(self.objectivesFrame,text=self.names[2])
+        self.obj4.grid(row=3,column=1,sticky="NSEW")
+        
+    def remObjFunc(self) -> None:
+        list = self.objectivesFrame.grid_slaves()
+        for l in list:
+            l.destroy()
+        self.addObjBtn = tkinter.Button(self.objectivesFrame, text="Add objective", command = self.addObjFunc) 
+        self.addObjBtn.grid(row=0,column=0,sticky="NSEW")
+        self.remObjBtn = tkinter.Button(self.objectivesFrame, text="Remove objective", command = self.remObjFunc) 
+        self.remObjBtn.grid(row=0,column=1,sticky="NSEW")
     
     def saveBtnFunc(self) -> None:
         if len(self.phasTool.possible) != 1:
@@ -158,6 +234,7 @@ class phasmoToolGui:
         elif mode == "Maps":
             map_name = UPL.gui.confirm("Hunters Index", "What map would you like to look up?", self.config["in_game_maps"])
             map_display.displayMap(map_name=map_name, map_images=self.game_maps)
+    
     def eviBtnFunc(self) -> None:
         if self.phasTool.current_round != []:
             msg = "\n\t".join(self.phasTool.current_round)
@@ -226,7 +303,8 @@ class phasmoToolGui:
         elif picked == "About":
             print("Test2")    
 
-    def test(self): pass
+    def test(self): 
+        print(self.sendField.get())
 
     def tipsSelect(self, event):
         widget = event.widget

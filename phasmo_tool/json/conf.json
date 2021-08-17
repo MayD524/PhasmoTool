@@ -1,4 +1,25 @@
 {
+    "allow_networking" : false,
+    "networking_display_name" : "",
+
+    "networking_host_ip" : "127.0.0.1",
+    "networking_host_port": 1222,
+
+    "in_game_objectives" : [
+        "witness a Ghost Event",
+        "photo of the Ghost",
+        "Motion Sensor",
+        "Walk through salt",
+        "Get EMF reading",
+        "Cleanse the area",
+        "Prevent hunting",
+        "Blow out candle",
+        "Escape during hunt",
+        "Use smudge when hunting",
+        "Get average sanity 25%"
+
+    ],
+
     "in_game_ghosts" : [
         "Banshee",
         "Demon",
@@ -15,6 +36,7 @@
         "Yokai",
         "Yurei"
     ],
+
     "in_game_items" : [
         "Spirit Box",
         "Ghost Writing Book",
@@ -39,6 +61,7 @@
         "Thermometer",
         "Tripod"
     ],
+
     "in_game_maps" : [
         "Asylum",
         "Bleasdale Farmhouse",

@@ -12,7 +12,7 @@ except ImportError:
     import UPL
 
 ## update this per version (used in updater)
-__version__ = '0.2.3'
+__version__ = '0.2.4'
 
 def boot_window():
     win = Tk()
@@ -22,9 +22,9 @@ def boot_window():
     canvas.pack()
     img = PhotoImage(file="./images/icons/icon.png")
     canvas.create_image(150, 150, image=img)
-    
+     
     win.after(5000, lambda:win.destroy())
-    
+     
     win.mainloop()
     
 if __name__ == "__main__":
@@ -34,5 +34,5 @@ if __name__ == "__main__":
         if UPL.gui.confirm("C69 Phasmo Tool", f"Do you want to update to version {need_update[1]['version']}", ["Yes", "No"]) == "Yes":
             C69_updater.update_program("phasmo_tool")
     
-    boot_window()
+    #boot_window()
     phasmoToolGui()

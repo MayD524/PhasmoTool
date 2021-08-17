@@ -1,9 +1,8 @@
 from tkinter import *
-from os import getcwd
 
 try:
     import PIL
-    
+
 except ImportError:
     from sys import executable
     from os import system
