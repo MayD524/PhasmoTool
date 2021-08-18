@@ -1,6 +1,7 @@
 from core import phasmoTool
 from tkinter import ttk
 import map_display
+import PT_lookup
 import tkinter
 import psutil
 import UPL
@@ -15,17 +16,16 @@ class phasmoToolGui:
         self.game_maps = UPL.Core.file_manager.getData_json("./json/maps.json")
         self.phasTool  = phasmoTool(self.ghosts)
         
-        if self.config["allow_networking"] == True:
+        '''if self.config["allow_networking"] == True:
             self.client = C69_phasmoTool_networking(
                 self.config["networking_display_name"],
                 self.phasTool,
                 self,
                 self.config["networking_host_ip"],
                 self.config["networking_host_port"]
-            )
+            )'''
         
         self.layout()
-     
         self.root.mainloop()
 
     
@@ -89,7 +89,10 @@ class phasmoToolGui:
         self.tips_list = tkinter.Listbox(self.tipsFrame,width=100,height=80)
         self.tips_list.insert(0,"Show us")
         self.tips_list.insert(1,"Spirit")
-        self.tips_list.insert(2,"")
+        self.tips_list.insert(2,"Repel ghost with smudge")
+        self.tips_list.insert(3,"Spirit box mechanics")
+        self.tips_list.insert(4,"Shades")
+        self.tips_list.insert(5,"Thrown items")
         self.tips_list.bind('<<ListboxSelect>>',self.tipsSelect)
         self.tips_list.pack()
 
@@ -131,10 +134,8 @@ class phasmoToolGui:
         
         ## other stuff
         self.tabCtrl.add(self.eviFrame,text='Evidence')
-        #self.eviFrame.columnconfigure( (0,1) weight=1)
-        #self.eviFrame.rowconfigure((0,1) weight=1)
          
-        #self.tabCtrl. 
+        
         self.tabCtrl.add(self.noteFrame,text='Notes')
         self.tabCtrl.add(self.objectivesFrame,text='Objectives')
         self.tabCtrl.add(self.chatFrame,text='Chat')
@@ -226,7 +227,8 @@ class phasmoToolGui:
         mode = UPL.gui.confirm('Hunters Index', "What page of you book would you like?", ["Ghosts", "Items", "Maps"])
         
         if mode == "Ghosts":
-            self.phasTool.lookup(UPL.gui.confirm("Hunters Index", "What would you like to look up?", self.config['in_game_ghosts']))
+            ghost = UPL.gui.confirm("Hunters Index", "What would you like to look up?", self.config['in_game_ghosts'])
+            PT_lookup.lookup_ghost(ghost, self.ghosts)
             
         elif mode == "items":
             pass
@@ -315,5 +317,12 @@ class phasmoToolGui:
             UPL.gui.popup("","Show us")
         elif picked == "Spirit":
             UPL.gui.popup("if you here a singular footstep sound and then another footstep sound 2 to 15 seconds later, it's a spirit.\n","Spirits")
-        elif picked == "About":
-            print("Test2") 
+        elif picked == "Repel ghost with smudge":
+            #Maybe?
+            UPL.gui.popup("To repel the ghost with a smudge stick, you must be within \"heartbeat\" range of the ghost for it to work.")
+        elif picked == "Spirit box mechanics":
+            UPL.gui.popup("You must be either within 3 meters of the ghost or in the same room as the ghost to get a response.")
+        elif picked == "Shades":
+            UPL.gui.popup("Shades still have a VERY LOW chance of hunting when multiple people are nearby\nTho it's not impossible for it to hunt")
+        elif picked == "Thrown items":
+            UPL.gui.popup("If you're within line of sight of items being thrown, you will lose sanity (the number of items thrown x 2 = % sanity lost)")

@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
-import requests
 import shutil
 import sys
 import os
+try:
+    import requests
+
+except Exception:
+    os.system(f"{sys.executable} -m pip install requests")
+    import requests
 
 UPL_Link = "https://upl.crossroadsactua.repl.co/UPL.zip"
 

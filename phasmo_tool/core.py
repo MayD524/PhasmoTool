@@ -86,6 +86,9 @@ class phasmoTool:
             UPL.gui.popup(title="Unknown ghost type", msg=f"The ghost {ghost} is not known")  
     
     def add_evidence(self) -> UPL.null:
+        #print(self.possible_evidence)
+        if self.possible_evidence == None:
+            self.possible_evidence = self.default
         evidence = UPL.gui.confirm("Select Evidence", "What evidence have you collected hunter?", self.possible_evidence)
         evidence = self.get_evidenceType(evidence)
         
@@ -111,8 +114,6 @@ class phasmoTool:
          
             self.possible_evidence = tmp
 
-                
-    
     def rem_evidence(self) -> UPL.null:
         evidence = UPL.gui.confirm("Select Evidence", "What evidence have you collected hunter?", self.current_round)
         evidence = self.get_evidenceType(evidence)
@@ -133,7 +134,9 @@ class phasmoTool:
                     
                     elif i.lower() not in tmp:
                         tmp.append(i)
-                        
+            tmp = list(set(tmp))  
+            if tmp != []:
+                tmp = tmp.sort()          
             self.possible_evidence = tmp
             
         self.current_guess()
@@ -187,8 +190,13 @@ class phasmoTool:
                     possible = [i for i in self.ghosts_sep[evidence] if i in possible]
                 else:
                     possible = self.ghosts_sep[evidence]
-        self.possible = possible
+                    
+        if possible != []:
+            self.possible = possible
+        else:
+            self.possible = self.ghosts.keys() 
     
+    ## command line specific
     def displayHelp(self) -> UPL.null:
         print("[add] Add Evidence\n[rem] Remove Evidence\n[look] Ghost Lookup\n[ghosts] Display all possible ghosts\n[evi] Display all current evidences\n[clear] Clears the screen\n[help] Display help\n[exit] Exits")
         

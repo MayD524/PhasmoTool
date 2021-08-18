@@ -1,6 +1,7 @@
 from main_gui import phasmoToolGui
 from tkinter import *
 import C69_updater
+import C69_common
 
 try:
     import UPL
@@ -12,7 +13,7 @@ except ImportError:
     import UPL
 
 ## update this per version (used in updater)
-__version__ = '0.2.4'
+__version__ = '0.2.5'
 
 def boot_window():
     win = Tk()
@@ -20,10 +21,11 @@ def boot_window():
     win.resizable(False, False)
     canvas = Canvas(win, width=300, height=300)
     canvas.pack()
-    img = PhotoImage(file="./images/icons/icon.png")
+    #C69_common.resize_image("./images/icons/boot_img.png", 300, 300)
+    img = PhotoImage(file="./images/icons/boot_img.png")
     canvas.create_image(150, 150, image=img)
      
-    win.after(5000, lambda:win.destroy())
+    win.after(3500, lambda:win.destroy())
      
     win.mainloop()
     
