@@ -13,7 +13,7 @@ except ImportError:
     import UPL
 
 ## update this per version (used in updater)
-__version__ = '0.2.5'
+__version__ = '0.2.5.3'
 
 def boot_window():
     win = Tk()
@@ -21,20 +21,26 @@ def boot_window():
     win.resizable(False, False)
     canvas = Canvas(win, width=300, height=300)
     canvas.pack()
+    
     #C69_common.resize_image("./images/icons/boot_img.png", 300, 300)
     img = PhotoImage(file="./images/icons/boot_img.png")
     canvas.create_image(150, 150, image=img)
      
-    win.after(3500, lambda:win.destroy())
-     
+    win.after(3500, lambda:win.destroy())  
     win.mainloop()
     
 if __name__ == "__main__":
-    need_update = C69_updater.check_update("phasmo_tool", __version__)
+    config = UPL.Core.file_manager.getData_json("./json/conf.json")
     
-    if need_update[0]:
-        if UPL.gui.confirm("C69 Phasmo Tool", f"Do you want to update to version {need_update[1]['version']}", ["Yes", "No"]) == "Yes":
-            C69_updater.update_program("phasmo_tool")
+    if config["allow_auto_update"]:
+        need_update = C69_updater.check_update("phasmo_tool", __version__)
+        
+        if need_update[0]:
+            if UPL.gui.confirm("C69 Phasmo Tool", f"Do you want to update to version {need_update[1]['version']}", ["Yes", "No"]) == "Yes":
+                C69_updater.update_program("phasmo_tool")
     
-    #boot_window()
-    phasmoToolGui()
+    if not config['debug_mode']:
+        boot_window()
+    else:
+        print(config)    
+    phasmoToolGui(config)

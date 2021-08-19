@@ -5,9 +5,10 @@ except Exception:
     import sys
     os.system(f"{sys.executable} -m pip install requests")
     import requests
-    
+import subprocess
 import shutil
 import json
+import sys
 import os
 
 def download(url:str) -> None:
@@ -35,3 +36,7 @@ def update_program(project_name:str) -> None:
     
     shutil.unpack_archive(filename, f"./")
     os.remove(filename)
+    subprocess.Popen(f"{sys.executable} ./Gui.py")
+    sys.exit(0)
+
+

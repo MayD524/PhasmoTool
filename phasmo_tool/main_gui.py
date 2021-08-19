@@ -1,33 +1,37 @@
+from _thread import start_new_thread
 from core import phasmoTool
 from tkinter import ttk
 import map_display
+import subprocess
 import PT_lookup
 import tkinter
 import psutil
 import UPL
-
+import sys
 ## import last due to UPL 
-#from networking.client.network_client import C69_phasmoTool_networking
+from networking.client.network_client import C69_phasmoTool_networking
 
 class phasmoToolGui:
-    def __init__(self):
+    def __init__(self, config:dict) -> None:
         self.ghosts    = UPL.Core.file_manager.getData_json("./json/ghosts.json")
-        self.config    = UPL.Core.file_manager.getData_json("./json/conf.json")
+        self.config    = config
         self.game_maps = UPL.Core.file_manager.getData_json("./json/maps.json")
         self.phasTool  = phasmoTool(self.ghosts)
-        
-        '''if self.config["allow_networking"] == True:
-            self.client = C69_phasmoTool_networking(
-                self.config["networking_display_name"],
-                self.phasTool,
-                self,
-                self.config["networking_host_ip"],
-                self.config["networking_host_port"]
-            )'''
-        
         self.layout()
+        
+        #if self.config["allow_networking"] == True:
+        #    start_new_thread(self.chat_Code, ())
+            
         self.root.mainloop()
 
+    def chat_Code(self) -> None:
+        C69_phasmoTool_networking(
+                self.config["networking_display_name"],
+                self.phasTool,
+                "temp_room",
+                self.config["networking_host_ip"],
+                self.config["networking_host_port"]
+            )
     
     def layout(self):
         self.root = tkinter.Tk()
@@ -35,8 +39,11 @@ class phasmoToolGui:
         self.tabCtrl = ttk.Notebook(self.root)
         ##Menubar 
         self.menuBar = tkinter.Menu(self.root,tearoff=0)
-        self.settingsBar = tkinter.Menu(self.menuBar,tearoff=0)
-        self.settingsBar.add_command(label="Change background color",command=self.test)
+        self.root.config(menu=self.menuBar)
+        settingsBar = tkinter.Menu(self.menuBar,tearoff=0)
+        self.menuBar.add_cascade(label="Settings", menu=settingsBar)
+        settingsBar.add_command(label="Open settings",command=self.openSettings)
+        settingsBar.add_command(label="Restart",command=self.restartProg)
         
         ## Notes page
         self.noteFrame = tkinter.Frame(self.root) 
@@ -153,22 +160,30 @@ class phasmoToolGui:
         self.root.config(menu=self.menuBar)
     
     def addObjFunc(self) -> None:
-        self.names = []
+        self.names = ["Bone"]
         for i in range(3):
-            self.names.append(UPL.gui.confirm("Add objective","Objective name" ,self.config['in_game_objectives']))
+            opts = [x for x in self.config['in_game_objectives'] if x not in self.names]
+            self.names.append(UPL.gui.confirm("Add objective", "Objective name", opts))
         
-        self.obj1 = tkinter.Checkbutton(self.objectivesFrame,text="Bone")   
-        self.obj1.grid(row=2,column=0,sticky="NSEW")
-        
-        self.obj2 = tkinter.Checkbutton(self.objectivesFrame,text=self.names[0])
-        self.obj2.grid(row=2,column=1,sticky="NSEW")
-        
-        self.obj3 = tkinter.Checkbutton(self.objectivesFrame,text=self.names[1])
-        self.obj3.grid(row=3,column=0,sticky="NSEW")
-        
-        self.obj4 = tkinter.Checkbutton(self.objectivesFrame,text=self.names[2])
-        self.obj4.grid(row=3,column=1,sticky="NSEW")
-        
+        self.objsVars = [tkinter.IntVar() for i in range(4)]
+        self.objsBtns = []
+        row, column = 2, 0
+        for i in range(len(self.objsVars)):
+            self.objsBtns.append(tkinter.Checkbutton(self.objectivesFrame,variable=self.objsVars[i],onvalue=1, offvalue=0,command=self.checkObjectives,text=self.names[i]))
+            self.objsBtns[-1].grid(row=row, column=column, sticky="NSEW")
+            
+            if column == 1:
+                row += 1;column = 0
+            else:
+                column += 1
+
+    def checkObjectives(self) -> None:
+        x = 0
+        for i in self.objsVars:
+            x += 1 if i.get() == 1 else 0
+        if x == 4:
+            UPL.gui.popup("You completed all the objectives","Good Job")
+
     def remObjFunc(self) -> None:
         list = self.objectivesFrame.grid_slaves()
         for l in list:
@@ -299,9 +314,11 @@ class phasmoToolGui:
         if picked == "Devs":
             self.people_list.insert(0,"Cross - Python (Core)")
             self.people_list.insert(1,"Sweden - Python (GUI)")
+        
         elif picked == "Artists":
             self.people_list.insert(0,"Aether - Icons & Loading Image")
             self.people_list.insert(1,"Flower - Loading Image")
+        
         elif picked == "About":
             print("Test2")    
 
@@ -326,3 +343,67 @@ class phasmoToolGui:
             UPL.gui.popup("Shades still have a VERY LOW chance of hunting when multiple people are nearby\nTho it's not impossible for it to hunt")
         elif picked == "Thrown items":
             UPL.gui.popup("If you're within line of sight of items being thrown, you will lose sanity (the number of items thrown x 2 = % sanity lost)")
+    def restartProg(self) -> None:
+        
+        subprocess.Popen(f"{sys.executable} ./Gui.py")
+        sys.exit(0)
+        
+    def openSettings(self) -> None:
+        self.settingsWin    = tkinter.Toplevel()
+        self.debugModeTxt   = tkinter.StringVar()
+        self.updateModeTxt  = tkinter.StringVar()
+        self.networkModeTxt = tkinter.StringVar()
+        self.networkIPIn = tkinter.StringVar()
+        self.networkPortIn = tkinter.StringVar()
+
+
+
+        self.debugModeTxt.set("Debug mode on" if self.config['debug_mode'] else "Debug mode off")
+        self.debugModeToggle = tkinter.Button(self.settingsWin,textvariable=self.debugModeTxt,command=lambda: self.toggle_button("debug_mode"))
+        self.debugModeToggle.grid(row=0, column=0, sticky="NSEW")
+
+        self.updateModeTxt.set("Auto update on" if self.config['allow_auto_update'] else "Auto update off")
+        self.autoModeToggle = tkinter.Button(self.settingsWin,textvariable=self.updateModeTxt,command=lambda: self.toggle_button("allow_auto_update"))
+        self.autoModeToggle.grid(row=0, column=1, sticky="NSEW")
+        
+        self.networkModeTxt.set("Allow network on" if self.config['allow_networking'] else "Auto network off")
+        self.networkModeToggle = tkinter.Button(self.settingsWin,textvariable=self.networkModeTxt,command=lambda: self.toggle_button("allow_networking"))
+        self.networkModeToggle.grid(row=2, column=0, sticky="NSEW")
+
+        self.updateNetworkBtn = tkinter.Button(self.settingsWin,text="Update network",command=self.updateNetwork)
+        self.updateNetworkBtn.grid(row=2,column=1,sticky="NSEW")
+        self.networkIPTxt = tkinter.Label(self.settingsWin,text="Input ip")
+        self.networkIPTxt.grid(row=3, column=0, sticky="NSEW")
+        
+        self.networkIP = tkinter.Entry(self.settingsWin,textvariable=self.networkIPIn)
+        self.networkIP.grid(row=3, column=1, sticky="NSEW")
+        
+        self.networkPortTxt = tkinter.Label(self.settingsWin,text="Input port")
+        self.networkPortTxt.grid(row=4, column=0, sticky="NSEW")
+        
+        self.networkPort = tkinter.Entry(self.settingsWin,textvariable=self.networkPortIn)
+        self.networkPort.grid(row=4, column=1, sticky="NSEW")
+        
+
+
+        self.settingsWin.title("C69 PhasmoTool")
+        self.settingsWin.resizable(False, False)
+        self.settingsWin.geometry("200x200")
+        self.settingsWin.mainloop()
+        
+    def updateNetwork(self) -> None:
+        if self.networkIPIn.get() == "" or self.networkPortIn.get() == "":
+            UPL.gui.popup("Dont leave port or ip address empty","Error?")
+        else:
+            self.config["networking_host_ip"] = int(self.networkIPIn.get())
+            UPL.Core.file_manager.write_json("./json/conf.json", self.config["networking_host_ip"], 2)
+            self.config["networking_host_port"] = int(self.networkPortIn.get())
+            UPL.Core.file_manager.write_json("./json/conf.json", self.config["networking_host_port"], 2)
+            
+            return
+    def toggle_button(self, setting_opt:str) -> None:
+        self.config[setting_opt] = not self.config[setting_opt]
+        self.updateModeTxt.set("Auto update on" if self.config['allow_auto_update'] else "Auto update off")
+        self.debugModeTxt.set("Debug mode on" if self.config['debug_mode'] else "Debug mode off")
+        self.networkModeTxt.set("Allow network on" if self.config['allow_networking'] else "Auto network off")
+        UPL.Core.file_manager.write_json("./json/conf.json", self.config, 2)

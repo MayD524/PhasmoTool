@@ -38,14 +38,17 @@ class ServerCode:
             conn.send(message)
     
     def ThreadedClient(self, connection:socket.socket, address:str) -> None:
-        connection.send("NAME".encode('utf-8'))
+        connection.send("CLIENT_NAME".encode('utf-8'))
         name = self.process_packet(connection, 2048)
+        print(name)
         
-        connection.send("ROOMCODE".encode("utf-8"))
+        connection.send("CLIENT_ROOMCODE".encode("utf-8"))
         current_room = self.process_packet(connection, 2048)
+        print(current_room)
         
-        if current_room in self.rooms:
+        if current_room["data"] in self.rooms:
             connection.send("SERVER_ACCEPTED".encode('utf-8'))
+            self.rooms[current_room["data"]].append({"name" : name, "conn" : connection})
         
         else:
             connection.send("SERVER_DECLINE".encode('utf-8'))
@@ -56,7 +59,7 @@ class ServerCode:
                 packet_data = self.process_packet(connection)
                 
                 data = packet_data["data"]
-                print(packet_data)
+                print(data)
                 
                 if packet_data['type'] == 'CHAT':
                     if len(data) > 2048:
