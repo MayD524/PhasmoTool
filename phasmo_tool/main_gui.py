@@ -9,11 +9,12 @@ import psutil
 import UPL
 import sys
 ## import last due to UPL 
-from networking.client.network_client import C69_phasmoTool_networking
+#from networking.client.network_client import C69_phasmoTool_networking
 
 class phasmoToolGui:
     def __init__(self, config:dict) -> None:
         self.ghosts    = UPL.Core.file_manager.getData_json("./json/ghosts.json")
+        self.tools     = UPL.Core.file_manager.getData_json("./json/tools.json")
         self.config    = config
         self.game_maps = UPL.Core.file_manager.getData_json("./json/maps.json")
         self.phasTool  = phasmoTool(self.ghosts)
@@ -24,14 +25,14 @@ class phasmoToolGui:
             
         self.root.mainloop()
 
-    def chat_Code(self) -> None:
+    '''def chat_Code(self) -> None:
         C69_phasmoTool_networking(
                 self.config["networking_display_name"],
                 self.phasTool,
                 "temp_room",
                 self.config["networking_host_ip"],
                 self.config["networking_host_port"]
-            )
+            )'''
     
     def layout(self):
         self.root = tkinter.Tk()
@@ -94,12 +95,10 @@ class phasmoToolGui:
         ##Tips frame
         self.tipsFrame = tkinter.Frame(self.root)    
         self.tips_list = tkinter.Listbox(self.tipsFrame,width=100,height=80)
-        self.tips_list.insert(0,"Show us")
-        self.tips_list.insert(1,"Spirit")
-        self.tips_list.insert(2,"Repel ghost with smudge")
-        self.tips_list.insert(3,"Spirit box mechanics")
-        self.tips_list.insert(4,"Shades")
-        self.tips_list.insert(5,"Thrown items")
+        
+        for i in range(len(self.config['C69_tips'])):
+            self.tips_list.insert(i, self.config['C69_tips'][i])
+
         self.tips_list.bind('<<ListboxSelect>>',self.tipsSelect)
         self.tips_list.pack()
 
@@ -245,9 +244,10 @@ class phasmoToolGui:
             ghost = UPL.gui.confirm("Hunters Index", "What would you like to look up?", self.config['in_game_ghosts'])
             PT_lookup.lookup_ghost(ghost, self.ghosts)
             
-        elif mode == "items":
-            pass
-        
+        elif mode == "Items":
+            item = UPL.gui.confirm("Hunters Index", "What item do you want to look up?", self.config["in_game_items"])
+            PT_lookup.lookup_tool(item, self.tools)
+            
         elif mode == "Maps":
             map_name = UPL.gui.confirm("Hunters Index", "What map would you like to look up?", self.config["in_game_maps"])
             map_display.displayMap(map_name=map_name, map_images=self.game_maps)
@@ -290,9 +290,9 @@ class phasmoToolGui:
             index += 1
             
     def CurSelet(self, event):
-        widget = event.widget
-        selection=widget.curselection()
-        picked = widget.get(selection[0])
+        widget    = event.widget
+        selection =widget.curselection()
+        picked    = widget.get(selection[0])
         self.update_Evidence(picked)
 
     def dontClick(self) -> None:
@@ -306,9 +306,9 @@ class phasmoToolGui:
                     proc.kill()
 
     def teamSelect(self, event):
-        widget = event.widget
-        selection=widget.curselection()
-        picked = widget.get(selection[0])
+        widget    = event.widget
+        selection =widget.curselection()
+        picked    = widget.get(selection[0])
         self.people_list.delete(0, self.people_list.size())
         
         if picked == "Devs":
@@ -332,17 +332,26 @@ class phasmoToolGui:
         
         if picked == "Show us":
             UPL.gui.popup("","Show us")
+        
         elif picked == "Spirit":
             UPL.gui.popup("if you here a singular footstep sound and then another footstep sound 2 to 15 seconds later, it's a spirit.\n","Spirits")
+        
         elif picked == "Repel ghost with smudge":
             #Maybe?
             UPL.gui.popup("To repel the ghost with a smudge stick, you must be within \"heartbeat\" range of the ghost for it to work.")
+        
         elif picked == "Spirit box mechanics":
             UPL.gui.popup("You must be either within 3 meters of the ghost or in the same room as the ghost to get a response.")
+        
         elif picked == "Shades":
             UPL.gui.popup("Shades still have a VERY LOW chance of hunting when multiple people are nearby\nTho it's not impossible for it to hunt")
+        
         elif picked == "Thrown items":
             UPL.gui.popup("If you're within line of sight of items being thrown, you will lose sanity (the number of items thrown x 2 = % sanity lost)")
+    
+        elif picked == "Attracting the ghost":
+            UPL.gui.popup("If you use the Spirit Box redundantly or taunt or using trigger words.\nThat will make the ghost more likely to hunt.","C69 PhasmoTool Hits")
+    
     def restartProg(self) -> None:
         
         subprocess.Popen(f"{sys.executable} ./Gui.py")
@@ -353,11 +362,9 @@ class phasmoToolGui:
         self.debugModeTxt   = tkinter.StringVar()
         self.updateModeTxt  = tkinter.StringVar()
         self.networkModeTxt = tkinter.StringVar()
-        self.networkIPIn = tkinter.StringVar()
-        self.networkPortIn = tkinter.StringVar()
-
-
-
+        self.networkIPIn    = tkinter.StringVar()
+        self.networkPortIn  = tkinter.StringVar()
+        
         self.debugModeTxt.set("Debug mode on" if self.config['debug_mode'] else "Debug mode off")
         self.debugModeToggle = tkinter.Button(self.settingsWin,textvariable=self.debugModeTxt,command=lambda: self.toggle_button("debug_mode"))
         self.debugModeToggle.grid(row=0, column=0, sticky="NSEW")

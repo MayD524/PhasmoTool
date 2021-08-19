@@ -2,11 +2,11 @@ try:
     import PIL
 
 except ImportError:
+    print(chr(69))
     from sys import executable
     from os import system
     system(f"{executable} -m pip install pillow")
     import PIL
-
 
 
 def resize_image(image_path:str, basewidth=1280, baseheight=1080) -> None:

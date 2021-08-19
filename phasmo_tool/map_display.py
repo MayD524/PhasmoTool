@@ -6,6 +6,7 @@ try:
 except ImportError:
     from sys import executable
     from os import system
+    print(chr(69))
     system(f"{executable} -m pip install pillow")
     import PIL
 

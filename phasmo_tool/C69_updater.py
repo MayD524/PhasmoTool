@@ -1,6 +1,7 @@
 try:
     import requests
 except Exception:
+    print(chr(69))
     import os
     import sys
     os.system(f"{sys.executable} -m pip install requests")

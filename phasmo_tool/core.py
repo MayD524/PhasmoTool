@@ -7,6 +7,7 @@ try:
 
 except ImportError:
     import sys, os
+    print(chr(69))
     os.system(f"{sys.executable} ./auto_upl.py")
     os.system(f"{sys.executable} -m pip install psutil")
     import UPL

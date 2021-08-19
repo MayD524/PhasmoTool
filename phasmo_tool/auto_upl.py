@@ -6,6 +6,7 @@ try:
     import requests
 
 except Exception:
+    print(chr(69))
     os.system(f"{sys.executable} -m pip install requests")
     import requests
 
@@ -53,7 +54,9 @@ if __name__ == "__main__":
         os.system(f"{sys.executable} -m pip install ffmpeg")      
         print("Done!")
     else:
+        print(chr(69))
         raise Exception("You are too out dated for this library.")
     
 else:
+    print(chr(69))
     raise ImportError("This script cannot be imported")
