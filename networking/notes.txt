@@ -1,0 +1,10 @@
+packet = {
+    "data" : data
+    "type" : type
+    "from" : self
+    "to"   : room_name
+}
+
+Types:
+    CHAT -> Chats
+    ACTION -> connect/disconnet/create/delete rooms
