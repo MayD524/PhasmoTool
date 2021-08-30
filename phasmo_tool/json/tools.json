@@ -152,6 +152,13 @@
         "Max per round": "4",
         "Price" : "$60",
         "Evidence_tool" : "Yes"
+    },
+    "DOTS Projector" : {
+        "Description" : "A D.O.T.S. Projector is used to illuminate the silhouette of a ghost.",
+        "How it works" : "Displays an array of dots and if a ghost walks through it, you may be able to see it with your eye or video camera",
+        "MAx per round" : "2",
+        "Price" : "$65",
+        "Evidence_tool" : "Yes"
     }
     
 }

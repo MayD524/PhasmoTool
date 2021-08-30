@@ -31,10 +31,11 @@ class phasmoTool:
             "spirit box"            : [],
             "ghost writing"         : [],
             "ghost orb"             : [],
-            "freezing temperatures" : []
+            "freezing temperatures" : [],
+            "dots projector"        : []
         }
         self.current_round = []
-        self.default = ["fingerprints", "ghost orb", "spirit box", "freezing temperatures", "emf level 5", "ghost writing"]
+        self.default = ["fingerprints", "ghost orb", "spirit box", "freezing temperatures", "emf level 5", "ghost writing", "dots projector"]
         self.possible_evidence = self.default
         self.clicks = 0
         self.groupGhosts()
@@ -73,6 +74,9 @@ class phasmoTool:
         
         elif "writ" in evidence:
             return "ghost writing"
+        
+        elif "dots" in evidence:
+            return "dots projector"
         
         else:
             return False

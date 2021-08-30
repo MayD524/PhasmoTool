@@ -316,11 +316,11 @@ class phasmoToolGui:
             self.people_list.insert(1,"Sweden - Python (GUI)")
         
         elif picked == "Artists":
-            self.people_list.insert(0,"Aether - Icons & Loading Image")
-            self.people_list.insert(1,"Flower - Loading Image")
+            self.people_list.insert(0,"Daisy  - Ghost icons")
+            self.people_list.insert(1,"Flower - Loading Image & ghost icons")
         
         elif picked == "About":
-            print("Test2")    
+            self.people_list.insert(0, "We are char(69) :>")  
 
     def test(self): 
         print(self.sendField.get())

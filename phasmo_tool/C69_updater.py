@@ -22,11 +22,27 @@ def download(url:str) -> None:
             
     return filename
 
+def greater_verison_check(current_version:str, pulled_version:str) -> bool:
+        new_l = pulled_version.split('.')
+        ver_l = current_version.split('.')
+
+        if (newLength := len(new_l)) > (ver_len := len(ver_l)):
+            ver_l.extend(["0"] * (newLength - ver_len))
+
+        elif (newLength := len(new_l)) < (ver_len := len(ver_l)):
+            new_l.extend(["0"] * (ver_len - newLength))
+            
+        for i in range(len(new_l)):
+            if int(new_l[i]) > int(ver_l[i]): return True
+            if int(new_l[i]) < int(ver_l[i]): return False
+    
+        return False
+
 def check_update(project_name:str, version:str) -> tuple:
     r = requests.get("https://c69projectrepo.crossroadsactua.repl.co/stuff.json")
     projects = json.loads(r.content.decode('utf-8'))
     
-    if projects[project_name]["version"] != version:
+    if projects[project_name]["version"] != version and greater_verison_check(version, projects[project_name]["version"]):
         return (True, projects[project_name])
     
     return (False, "All up to date")

@@ -15,7 +15,7 @@ except ImportError:
 
 ## update this per version (used in updater)
 ## Major.Minor.Part.Bug fix
-__version__ = '0.2.7'
+__version__ = '0.2.8'
 
 def boot_window():
     win = Tk()
