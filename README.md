@@ -3,7 +3,7 @@ A tool kit for making life in phasmophobia a little bit easier. The digital phas
 
 ### Authors:
     Brought to you by the C69 Dev Team
-    Python | Core: Ryan/Cross
+    Python | Core: May
     Python | GUI: Jerk/Sweden
     Art    | Art : Aether
     Art    | Art : Flower
@@ -20,5 +20,5 @@ A tool kit for making life in phasmophobia a little bit easier. The digital phas
 
 
 ### Contact:
-    Cross:  CrossroadsActual#8008 (Python Core)
+    Cross:  MayActual#8008 (Python Core)
     Sweden: SwedenWarfare#0420    (Python GUI)
