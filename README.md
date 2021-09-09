@@ -5,7 +5,7 @@ A tool kit for making life in phasmophobia a little bit easier. The digital phas
     Brought to you by the C69 Dev Team
     Python | Core: May
     Python | GUI: Jerk/Sweden
-    Art    | Art : Aether
+    Art    | Art : Daisy
     Art    | Art : Flower
 
 ### Requirements:
